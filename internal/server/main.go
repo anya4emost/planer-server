@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/anya4emost/planer-server/internal/config"
 	"github.com/anya4emost/planer-server/internal/database"
+	"github.com/anya4emost/planer-server/internal/server/router"
 	"github.com/gofiber/fiber/v2"
 	"github.com/jmoiron/sqlx"
 )
@@ -14,6 +15,7 @@ type Server struct {
 }
 
 func (s *Server) Start() error {
+	s.SetupRoutes()
 	return s.app.Listen(s.port)
 }
 
@@ -23,7 +25,9 @@ func (s *Server) Stop() error {
 }
 
 func NewServer(cfg *config.Config) *Server {
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		ErrorHandler: router.DefaultErrorHandler,
+	})
 	port := ":" + cfg.Port
 	db := database.Connect(cfg.DatabaseUrl)
 
