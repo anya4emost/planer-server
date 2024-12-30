@@ -2,8 +2,10 @@ package server
 
 import (
 	"github.com/anya4emost/planer-server/internal/config"
+	"github.com/anya4emost/planer-server/internal/controller"
 	"github.com/anya4emost/planer-server/internal/database"
 	"github.com/anya4emost/planer-server/internal/server/router"
+	"github.com/anya4emost/planer-server/internal/services"
 	"github.com/gofiber/fiber/v2"
 	"github.com/jmoiron/sqlx"
 )
@@ -15,7 +17,10 @@ type Server struct {
 }
 
 func (s *Server) Start() error {
-	s.SetupRoutes()
+	us := services.NewUserService(s.db)
+	uc := controller.NewAuthController(us)
+
+	s.SetupRoutes(uc)
 	return s.app.Listen(s.port)
 }
 

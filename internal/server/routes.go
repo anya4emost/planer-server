@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/anya4emost/planer-server/internal/controller"
 	"github.com/anya4emost/planer-server/internal/server/router"
 	"github.com/gofiber/fiber/v2"
 )
@@ -11,7 +12,10 @@ func healthCheck() fiber.Handler {
 	}
 }
 
-func (s *Server) SetupRoutes() {
+func (s *Server) SetupRoutes(uc *controller.AuthController) {
 	api := s.app.Group("/api")
 	api.Get("/", healthCheck())
+
+	api.Post("/login", uc.Login)
+	api.Post("/register", uc.Register)
 }
