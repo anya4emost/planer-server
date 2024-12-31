@@ -5,7 +5,7 @@ import (
 
 	"github.com/anya4emost/planer-server/internal/config"
 	"github.com/anya4emost/planer-server/internal/database"
-	"github.com/anya4emost/planer-server/internal/server/model"
+	"github.com/anya4emost/planer-server/internal/model"
 	"github.com/anya4emost/planer-server/pkg/util"
 )
 
