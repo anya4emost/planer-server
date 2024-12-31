@@ -4,7 +4,7 @@ import (
 	"github.com/anya4emost/planer-server/internal/config"
 	"github.com/anya4emost/planer-server/internal/controller"
 	"github.com/anya4emost/planer-server/internal/database"
-	"github.com/anya4emost/planer-server/internal/server/router"
+	"github.com/anya4emost/planer-server/internal/server/router/response"
 	"github.com/anya4emost/planer-server/internal/services"
 	"github.com/gofiber/fiber/v2"
 	"github.com/jmoiron/sqlx"
@@ -32,7 +32,7 @@ func (s *Server) Stop() error {
 
 func NewServer(cfg *config.Config) *Server {
 	app := fiber.New(fiber.Config{
-		ErrorHandler: router.DefaultErrorHandler,
+		ErrorHandler: response.DefaultErrorHandler,
 	})
 
 	port := ":" + cfg.Port

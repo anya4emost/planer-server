@@ -1,11 +1,14 @@
-package router
+package response
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/anya4emost/planer-server/internal/model"
+	"github.com/gofiber/fiber/v2"
+)
 
 func Response(ctx *fiber.Ctx, code int, data interface{}) error {
-	return ctx.Status(code).JSON(fiber.Map{
-		"success": true,
-		"data":    data,
+	return ctx.Status(code).JSON(model.ApiResponse{
+		Success: true,
+		Data:    data,
 	})
 }
 
