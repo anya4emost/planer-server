@@ -13,11 +13,24 @@ func healthCheck() fiber.Handler {
 	}
 }
 
-func (s *Server) SetupRoutes(uc *controller.AuthController) {
+func (s *Server) SetupRoutes(
+	authController *controller.AuthController,
+	taskController *controller.TasksController,
+	aimController *controller.AimsController) {
+
 	api := s.app.Group("/api")
 	api.Get("/", healthCheck())
 
-	api.Post("/login", uc.Login)
-	api.Post("/register", uc.Register)
-	api.Get("/me", middleware.Authenticate(s.jwtSecret), uc.Me)
+	api.Post("/login", authController.Login)
+	api.Post("/register", authController.Register)
+	api.Get("/me", middleware.Authenticate(s.jwtSecret), authController.Me)
+
+	tasksApi := api.Group("/tasks")
+	tasksApi.Use(middleware.Authenticate(s.jwtSecret))
+	tasksApi.Get("/", taskController.GetTasks)
+
+	aimsApi := api.Group("/aims")
+	aimsApi.Use(middleware.Authenticate(s.jwtSecret))
+	aimsApi.Get("/", aimController.GetAims)
+	aimsApi.Post("/", aimController.CreateAim)
 }

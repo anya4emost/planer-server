@@ -40,13 +40,13 @@ create table events(
 
 create table tasks(
       id text not null primary key default nanoid(),
-      status task_status,
+      status task_status not null,
       description text,
       icon text,
       color text,
-      type task_type,
-      creator text not null references users(id),
-      doer text not null references users(id),
-      aim text not null references aims(id),
+      type task_type not null,
+      creator_id text not null references users(id),
+      doer_id text not null references users(id),
+      aim_id text not null references aims(id),
       event_id text references events(id)
 );

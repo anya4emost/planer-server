@@ -18,10 +18,15 @@ type Server struct {
 }
 
 func (s *Server) Start() error {
-	us := services.NewUserService(s.db)
-	uc := controller.NewAuthController(us, s.jwtSecret)
+	userService := services.NewUserService(s.db)
+	taskService := services.NewTaskService(s.db)
+	aimService := services.NewAimService(s.db)
 
-	s.SetupRoutes(uc)
+	authController := controller.NewAuthController(userService, s.jwtSecret)
+	taskController := controller.NewTasksController(taskService)
+	aimController := controller.NewAimsController(aimService)
+
+	s.SetupRoutes(authController, taskController, aimController)
 	return s.app.Listen(s.port)
 }
 

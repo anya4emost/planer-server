@@ -35,5 +35,16 @@ func main() {
 		log.Fatalf("Error inserting users: %v\n", err)
 	}
 
+	// db.NamedExec(
+	// 	`insert into aims (user_id, name)
+	// 	values(user_id, name)`,
+	// 	user.id,
+	// )
+
+	// db.NamedExec(
+	// 	`insert into tasks (status, description, type, creator_id, doer_id, aim_id)
+	// 	values (status, description, type, creator_id, doer_id, aim_id)`,
+	// )
+
 	log.Printf("Successfully inserted users: %v\n", users)
 }
