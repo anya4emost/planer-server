@@ -28,16 +28,6 @@ create table custom_category(
     name text not null
 );
 
-create table events(
-      id text not null primary key default nanoid(),
-      category event_category,
-      date timestamptz,
-      time time not null,
-      repit event_repit_type,
-      remind event_remind_type,
-      custom_category_id text not null references custom_category(id)
-);
-
 create table tasks(
       id text not null primary key default nanoid(),
       status task_status not null,
@@ -47,6 +37,16 @@ create table tasks(
       type task_type not null,
       creator_id text not null references users(id),
       doer_id text not null references users(id),
-      aim_id text not null references aims(id),
-      event_id text references events(id)
+      aim_id text not null references aims(id)
+);
+
+create table events(
+      id text not null primary key default nanoid(),
+      category event_category,
+      date timestamptz,
+      time time not null,
+      repit event_repit_type,
+      remind event_remind_type,
+      custom_category_id text not null references custom_category(id),
+      task_id text unique references tasks(id) on delete cascade
 );

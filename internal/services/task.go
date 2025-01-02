@@ -39,13 +39,12 @@ func (s *TaskService) Create(inputTask model.TaskInput) (*model.Task, error) {
 		CreatorId:   inputTask.CreatorId,
 		DoerId:      inputTask.DoerId,
 		AimId:       inputTask.AimId,
-		EventId:     inputTask.EventId,
 	}
 
 	rows, err := s.db.NamedQuery(
 		`insert into tasks
-		(status, description, icon, color, type, creator_id, doer_id, aim_id, event_id)
-		values (:status, :description, :icon, :color, :type, :creator_id, :doer_id, :aim_id, :event_id)`,
+		(status, description, icon, color, type, creator_id, doer_id, aim_id)
+		values (:status, :description, :icon, :color, :type, :creator_id, :doer_id, :aim_id)`,
 		newTask,
 	)
 

@@ -15,7 +15,6 @@ type TaskInput struct {
 	CreatorId   string `json:"creatorId"`
 	DoerId      string `json:"doerId"`
 	AimId       string `json:"aimId"`
-	EventId     string `json:"eventId"`
 }
 
 type EventInput struct {
@@ -26,6 +25,7 @@ type EventInput struct {
 	Repit            string `json:"repit"`
 	Remind           string `json:"remind"`
 	CustomCategoryId string `json:"customCategoryId"`
+	TaskId           string `json:"taskId"`
 }
 
 type AimInput struct {

@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/anya4emost/planer-server/internal/model"
 	"github.com/anya4emost/planer-server/internal/server/router/response"
 	"github.com/anya4emost/planer-server/internal/services"
 	"github.com/gofiber/fiber/v2"
@@ -29,4 +30,25 @@ func (c *TasksController) GetTasks(ctx *fiber.Ctx) error {
 	}
 
 	return response.Ok(ctx, tasks)
+}
+
+func (c *TasksController) CreateTask(ctx *fiber.Ctx) error {
+	user := ctx.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	userid := claims["sub"].(string)
+
+	input := model.TaskInput{
+		CreatorId: userid,
+	}
+
+	if err := ctx.BodyParser(&input); err != nil {
+		return response.ErrorBadRequest(err)
+	}
+
+	task, err := c.s.Create(input)
+	if err != nil {
+		return response.ErrorBadRequest(err)
+	}
+
+	return response.Ok(ctx, task)
 }

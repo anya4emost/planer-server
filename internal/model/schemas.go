@@ -26,7 +26,6 @@ type Task struct {
 	CreatorId   string `db:"creator_id" json:"creatorId"`
 	DoerId      string `db:"doer_id" json:"doerId"`
 	AimId       string `db:"aim_id" json:"aimId"`
-	EventId     string `db:"event_id" json:"eventId"`
 }
 
 type CustomCategory struct {
@@ -53,4 +52,5 @@ type Event struct {
 	Repit            string `json:"repit"`
 	Remind           string `json:"remind"`
 	CustomCategoryId string `db:"custom_category_id" json:"customCategoryId"`
+	TaskId           string `db:"task_id" json:"taskId"`
 }

@@ -28,6 +28,7 @@ func (s *Server) SetupRoutes(
 	tasksApi := api.Group("/tasks")
 	tasksApi.Use(middleware.Authenticate(s.jwtSecret))
 	tasksApi.Get("/", taskController.GetTasks)
+	tasksApi.Post("/", taskController.CreateTask)
 
 	aimsApi := api.Group("/aims")
 	aimsApi.Use(middleware.Authenticate(s.jwtSecret))
