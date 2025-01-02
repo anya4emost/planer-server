@@ -19,14 +19,16 @@ type Server struct {
 
 func (s *Server) Start() error {
 	userService := services.NewUserService(s.db)
+	eventService := services.NewEventService(s.db)
 	taskService := services.NewTaskService(s.db)
 	aimService := services.NewAimService(s.db)
 
 	authController := controller.NewAuthController(userService, s.jwtSecret)
 	taskController := controller.NewTasksController(taskService)
 	aimController := controller.NewAimsController(aimService)
+	eventsController := controller.NewEventsController(eventService)
 
-	s.SetupRoutes(authController, taskController, aimController)
+	s.SetupRoutes(authController, taskController, aimController, eventsController)
 	return s.app.Listen(s.port)
 }
 

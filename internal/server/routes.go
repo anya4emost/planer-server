@@ -16,7 +16,8 @@ func healthCheck() fiber.Handler {
 func (s *Server) SetupRoutes(
 	authController *controller.AuthController,
 	taskController *controller.TasksController,
-	aimController *controller.AimsController) {
+	aimController *controller.AimsController,
+	eventsController *controller.EventsController) {
 
 	api := s.app.Group("/api")
 	api.Get("/", healthCheck())
@@ -29,6 +30,9 @@ func (s *Server) SetupRoutes(
 	tasksApi.Use(middleware.Authenticate(s.jwtSecret))
 	tasksApi.Get("/", taskController.GetTasks)
 	tasksApi.Post("/", taskController.CreateTask)
+
+	// POST "/api/tasks/${taskid}/event"
+	tasksApi.Post("/:taskid/event", eventsController.CreateEvent)
 
 	aimsApi := api.Group("/aims")
 	aimsApi.Use(middleware.Authenticate(s.jwtSecret))
