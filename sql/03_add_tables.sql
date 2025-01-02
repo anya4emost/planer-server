@@ -1,10 +1,10 @@
 CREATE TYPE sex AS ENUM ('мужчина', 'женщина', 'иное');
 
-CREATE TYPE event_repit_type AS ENUM ('repitable', 'no_repitable');
-CREATE TYPE event_remind_type AS ENUM ('one_hour', 'one_day', 'not_remind');
-CREATE TYPE event_category AS ENUM ('category_1', 'category_2', 'category_3');
-CREATE TYPE task_type AS ENUM ('type_1', 'type_2', 'type_3');
-CREATE TYPE task_status AS ENUM ('done', 'in_progress', 'on_hold');
+CREATE TYPE event_repit_type AS ENUM ('EveryHour', 'EveryDay', 'EveryWeek', 'EveryMonth', 'EveryYear');
+CREATE TYPE event_remind_type AS ENUM ('FiveMinBefore', 'TenMinBefore', 'FifteenMinBefore', 'ThirtyMinBefore', 'HourBefore', 'DayBefore', 'WeekBefore', 'MonthBefore');
+CREATE TYPE event_category AS ENUM ('Task', 'MemorableDate');
+CREATE TYPE task_type AS ENUM ('Urgent', 'Important');
+CREATE TYPE task_status AS ENUM ('Analysis', 'InProgress', 'Done', 'Canceled', 'OnHold');
 
 create table groups(
      id text not null primary key default nanoid(),
