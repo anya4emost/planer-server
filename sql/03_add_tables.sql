@@ -47,6 +47,6 @@ create table events(
       time time not null,
       repit event_repit_type,
       remind event_remind_type,
-      custom_category_id text not null references custom_category(id),
+      custom_category_id text references custom_category(id),
       task_id text unique references tasks(id) on delete cascade
 );
