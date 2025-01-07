@@ -51,3 +51,7 @@ func ErrorUnauthorized(err error, message string) error {
 		nil,
 	)
 }
+
+func InvalidTokenError(err error) error {
+	return NewApiError(err, 498, "invalid token error", "")
+}

@@ -18,12 +18,13 @@ type Server struct {
 }
 
 func (s *Server) Start() error {
+	sessionService := services.NewSessionService(s.db)
 	userService := services.NewUserService(s.db)
 	eventService := services.NewEventService(s.db)
 	taskService := services.NewTaskService(s.db)
 	aimService := services.NewAimService(s.db)
 
-	authController := controller.NewAuthController(userService, s.jwtSecret)
+	authController := controller.NewAuthController(userService, sessionService, s.jwtSecret)
 	taskController := controller.NewTasksController(taskService)
 	aimController := controller.NewAimsController(aimService)
 	eventsController := controller.NewEventsController(eventService)

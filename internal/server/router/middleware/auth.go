@@ -6,17 +6,18 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func errorHandler(c *fiber.Ctx, err error) error {
+func AccessTokenErrorHandler(c *fiber.Ctx, err error) error {
 	if err.Error() == jwtware.ErrJWTMissingOrMalformed.Error() {
 		return response.ErrorBadRequest(err)
 	}
 
-	return response.ErrorUnauthorized(err, "Ivalid or expired token")
+	return response.InvalidTokenError(err)
 }
 
-func Authenticate(secret string) fiber.Handler {
+func AccessTokenVerification(secret string) fiber.Handler {
 	return jwtware.New(jwtware.Config{
 		SigningKey:   jwtware.SigningKey{Key: []byte(secret)},
-		ErrorHandler: errorHandler,
+		ErrorHandler: AccessTokenErrorHandler,
+		TokenLookup:  "cookie:access-token",
 	})
 }

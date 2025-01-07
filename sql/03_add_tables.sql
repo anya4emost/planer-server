@@ -50,3 +50,12 @@ create table events(
       custom_category_id text references custom_category(id),
       task_id text unique references tasks(id) on delete cascade
 );
+
+create table sessions(
+     refresh_token text not null primary key,
+     user_id text not null references users(id),
+     created_at text,
+     expires_at text,
+     family text,
+     revoked boolean
+);

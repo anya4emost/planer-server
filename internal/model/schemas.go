@@ -54,3 +54,12 @@ type Event struct {
 	CustomCategoryId string `db:"custom_category_id" json:"customCategoryId"`
 	TaskId           string `db:"task_id" json:"taskId"`
 }
+
+type Session struct {
+	RefreshToken string `db:"refresh_token" json:"refreshToken"`
+	UserId       string `db:"user_id" json:"userId"`
+	CreatedAt    string `db:"created_at" json:"createdAt"`
+	ExpiresAt    string `db:"expires_at" json:"expiresAt"`
+	Family       string `db:"family" json:"family"`
+	Revoked      bool   `db:"revoked" json:"revoked"`
+}
