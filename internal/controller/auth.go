@@ -50,6 +50,16 @@ func getRefreshTokenTime() int64 {
 	return time.Now().Add(time.Hour * 24 * 7).Unix()
 }
 
+func ClearCookies(c *fiber.Ctx, key ...string) {
+	for i := range key {
+		c.Cookie(&fiber.Cookie{
+			Name:    key[i],
+			Expires: time.Now().Add(-time.Hour * 24),
+			Value:   "",
+		})
+	}
+}
+
 func (c *AuthController) Register(ctx *fiber.Ctx) error {
 	input := model.AuthInput{}
 	if err := ctx.BodyParser(&input); err != nil {
@@ -195,7 +205,9 @@ func (c *AuthController) Logout(ctx *fiber.Ctx) error {
 		return response.DefaultErrorHandler(ctx, err)
 	}
 
-	ctx.ClearCookie("access-token", "refresh-token")
+	// ctx.ClearCookie("access-token", "refresh-token")
+
+	ClearCookies(ctx, "access-token", "refresh-token")
 
 	return response.Ok(ctx, fiber.Map{})
 }
