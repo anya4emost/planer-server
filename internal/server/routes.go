@@ -1,6 +1,8 @@
 package server
 
 import (
+	"fmt"
+
 	"github.com/anya4emost/planer-server/internal/controller"
 	"github.com/anya4emost/planer-server/internal/server/router/middleware"
 	"github.com/anya4emost/planer-server/internal/server/router/response"
@@ -22,6 +24,14 @@ func (s *Server) SetupRoutes(
 	// s.app.Use(encryptcookie.New(encryptcookie.Config{
 	// 	Key: "secret-key-for-cookie-encription",
 	// }))
+
+	s.app.Use(func(c *fiber.Ctx) error {
+
+		fmt.Println("\n" + c.Path())
+		fmt.Println(c.GetReqHeaders())
+
+		return c.Next()
+	})
 
 	api := s.app.Group("/api")
 	api.Get("/", healthCheck())
