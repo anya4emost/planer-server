@@ -59,6 +59,39 @@ func (s *TaskService) Create(inputTask model.TaskInput) (*model.Task, error) {
 	return &task, err
 }
 
-func (s *TaskService) Update(task model.TaskInput) {}
+func (s *TaskService) Update(inputTask model.TaskInput) (*model.Task, error) {
 
-func (s *TaskService) Delete(task model.TaskInput) {}
+	taskToUpdate := model.Task{
+		Id:          inputTask.Id,
+		Status:      inputTask.Status,
+		Name:        inputTask.Name,
+		Description: inputTask.Description,
+		Icon:        inputTask.Icon,
+		Color:       inputTask.Color,
+		Type:        inputTask.Type,
+		DoerId:      inputTask.DoerId,
+		AimId:       inputTask.AimId,
+	}
+
+	rows, err := s.db.NamedQuery(
+		`update tasks set 
+		status=:status, name=:name, description=:description, icon=:icon, color=:color, type=:type, doer_id=:doer_id, aim_id=:aim_id
+		where id=:id`,
+		taskToUpdate,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+	task := model.Task{}
+	rows.Next()
+	rows.StructScan(&task)
+
+	return &task, err
+}
+
+func (s *TaskService) Delete(taskId string) error {
+	_, err := s.db.Exec("delete from tasks where id=$1", taskId)
+
+	return err
+}

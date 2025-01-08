@@ -56,3 +56,31 @@ func (c *TasksController) CreateTask(ctx *fiber.Ctx) error {
 
 	return response.Ok(ctx, task)
 }
+
+func (c *TasksController) UpdateTask(ctx *fiber.Ctx) error {
+	taskId := ctx.Params("taskid")
+	input := model.TaskInput{}
+
+	if err := ctx.BodyParser(&input); err != nil {
+		return response.ErrorBadRequest(err)
+	}
+
+	input.Id = taskId
+
+	task, err := c.s.Update(input)
+	if err != nil {
+		return response.ErrorBadRequest(err)
+	}
+
+	return response.Ok(ctx, task)
+}
+
+func (c *TasksController) DeleteTask(ctx *fiber.Ctx) error {
+	err := c.s.Delete(ctx.Params("taskid"))
+
+	if err != nil {
+		return response.ErrorBadRequest(err)
+	}
+
+	return response.Response(ctx, 204, fiber.Map{})
+}

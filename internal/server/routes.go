@@ -37,6 +37,8 @@ func (s *Server) SetupRoutes(
 	tasksApi.Use(middleware.AccessTokenVerification(s.jwtSecret))
 	tasksApi.Get("/", taskController.GetTasks)
 	tasksApi.Post("/", taskController.CreateTask)
+	tasksApi.Put("/:taskId/", taskController.UpdateTask)
+	tasksApi.Delete("/:taskId/", taskController.DeleteTask)
 
 	// POST "/api/tasks/${taskid}/event"
 	tasksApi.Post("/:taskid/event", eventsController.CreateEvent)
