@@ -41,8 +41,8 @@ func (c *AuthController) createToken(userId string, expiration int64) (string, e
 }
 
 func getAccessTokenTime() int64 {
-	// 30 seconds
-	return time.Now().Add(time.Second * 20).Unix()
+	// 15 Minutes
+	return time.Now().Add(time.Minute * 15).Unix()
 }
 
 func getRefreshTokenTime() int64 {

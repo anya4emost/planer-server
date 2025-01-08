@@ -18,6 +18,7 @@ type Aim struct {
 
 type Task struct {
 	Id          string `json:"id"`
+	Name        string `json:"name"`
 	Status      string `json:"status"`
 	Description string `json:"description"`
 	Icon        string `json:"icon"`

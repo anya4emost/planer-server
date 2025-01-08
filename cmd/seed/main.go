@@ -70,6 +70,7 @@ func main() {
 
 	newTask := model.Task{
 		Status:      "Analysis",
+		Name:        "task name",
 		Description: "first task description",
 		Icon:        "",
 		Color:       "",
@@ -81,8 +82,8 @@ func main() {
 
 	_, errt := db.NamedQuery(
 		`insert into tasks
-		(status, description, icon, color, type, creator_id, doer_id, aim_id)
-		values (:status, :description, :icon, :color, :type, :creator_id, :doer_id, :aim_id)`,
+		(status, name, description, icon, color, type, creator_id, doer_id, aim_id)
+		values (:status, :name, :description, :icon, :color, :type, :creator_id, :doer_id, :aim_id)`,
 		newTask,
 	)
 
