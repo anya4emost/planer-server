@@ -45,6 +45,10 @@ func (c *TasksController) CreateTask(ctx *fiber.Ctx) error {
 		return response.ErrorBadRequest(err)
 	}
 
+	if input.DoerId == "" {
+		input.DoerId = userid
+	}
+
 	task, err := c.s.Create(input)
 	if err != nil {
 		return response.ErrorBadRequest(err)
