@@ -30,7 +30,7 @@ create table custom_category(
 
 create table tasks(
       id text not null primary key default nanoid(),
-      name text not null,
+      name text not null check (name<>''),
       status task_status not null,
       description text,
       icon text,
