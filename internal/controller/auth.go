@@ -219,11 +219,13 @@ func (c *AuthController) Refresh(ctx *fiber.Ctx) error {
 
 	session, err := c.sessionService.GetByName(refreshToken)
 	if err != nil || session.RefreshToken == "" {
+		ClearCookies(ctx, "access-token", "refresh-token")
 		return response.ErrorUnauthorized(err, "User is not loged in")
 	}
 
 	if session.Revoked {
 		err = c.sessionService.DeleteAllFamily(session.Family)
+		ClearCookies(ctx, "access-token", "refresh-token")
 		if err != nil {
 			return response.DefaultErrorHandler(ctx, err)
 		}
@@ -235,13 +237,13 @@ func (c *AuthController) Refresh(ctx *fiber.Ctx) error {
 
 	accessToken, err := c.createToken(session.UserId, getAccessTokenTime())
 	if err != nil {
-		return response.ErrorUnauthorized(err, "Registration error")
+		return response.ErrorUnauthorized(err, "Refresh error")
 	}
 
 	refreshTokenTime := getRefreshTokenTime()
 	newRefreshToken, err := c.createToken(session.UserId, refreshTokenTime)
 	if err != nil {
-		return response.ErrorUnauthorized(err, "Registration error")
+		return response.ErrorUnauthorized(err, "Refresh error")
 	}
 
 	ctx.Cookie(&fiber.Cookie{
