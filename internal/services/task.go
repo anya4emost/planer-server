@@ -1,6 +1,8 @@
 package services
 
 import (
+	"database/sql"
+
 	"github.com/anya4emost/planer-server/internal/model"
 	"github.com/jmoiron/sqlx"
 )
@@ -39,7 +41,7 @@ func (s *TaskService) Create(inputTask model.TaskInput) (*model.Task, error) {
 		Type:        inputTask.Type,
 		CreatorId:   inputTask.CreatorId,
 		DoerId:      inputTask.DoerId,
-		AimId:       inputTask.AimId,
+		AimId:       sql.NullString{String: inputTask.AimId, Valid: len(inputTask.AimId) > 0},
 	}
 
 	rows, err := s.db.NamedQuery(
@@ -70,7 +72,7 @@ func (s *TaskService) Update(inputTask model.TaskInput) (*model.Task, error) {
 		Color:       inputTask.Color,
 		Type:        inputTask.Type,
 		DoerId:      inputTask.DoerId,
-		AimId:       inputTask.AimId,
+		AimId:       sql.NullString{String: inputTask.AimId, Valid: len(inputTask.AimId) > 0},
 	}
 
 	rows, err := s.db.NamedQuery(

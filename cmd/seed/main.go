@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 
@@ -77,7 +78,7 @@ func main() {
 		Type:        "Important",
 		CreatorId:   adminUser.Id,
 		DoerId:      adminUser.Id,
-		AimId:       firstAim.Id,
+		AimId:       sql.NullString{String: firstAim.Id, Valid: true},
 	}
 
 	_, errt := db.NamedQuery(

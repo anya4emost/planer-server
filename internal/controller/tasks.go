@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"slices"
+
 	"github.com/anya4emost/planer-server/internal/model"
 	"github.com/anya4emost/planer-server/internal/server/router/response"
 	"github.com/anya4emost/planer-server/internal/services"
@@ -29,7 +31,24 @@ func (c *TasksController) GetTasks(ctx *fiber.Ctx) error {
 		return response.ErrorBadRequest(err)
 	}
 
-	return response.Ok(ctx, tasks)
+	outputRange := []fiber.Map{}
+
+	for _, task := range tasks {
+		outputRange = slices.Insert(outputRange, len(outputRange), fiber.Map{
+			"id":          task.Id,
+			"name":        task.Name,
+			"status":      task.Status,
+			"description": task.Description,
+			"icon":        task.Icon,
+			"color":       task.Color,
+			"type":        task.Type,
+			"creatorId":   task.CreatorId,
+			"doerId":      task.DoerId,
+			"aimId":       task.AimId.String,
+		})
+	}
+
+	return response.Ok(ctx, outputRange)
 }
 
 func (c *TasksController) CreateTask(ctx *fiber.Ctx) error {

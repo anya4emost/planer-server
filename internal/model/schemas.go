@@ -1,6 +1,9 @@
 package model
 
-import "time"
+import (
+	"database/sql"
+	"time"
+)
 
 type User struct {
 	Id        string     `db:"id" json:"id"`
@@ -17,16 +20,16 @@ type Aim struct {
 }
 
 type Task struct {
-	Id          string `json:"id"`
-	Name        string `json:"name"`
-	Status      string `json:"status"`
-	Description string `json:"description"`
-	Icon        string `json:"icon"`
-	Color       string `json:"color"`
-	Type        string `json:"type"`
-	CreatorId   string `db:"creator_id" json:"creatorId"`
-	DoerId      string `db:"doer_id" json:"doerId"`
-	AimId       string `db:"aim_id" json:"aimId"`
+	Id          string         `json:"id"`
+	Name        string         `json:"name"`
+	Status      string         `json:"status"`
+	Description string         `json:"description"`
+	Icon        string         `json:"icon"`
+	Color       string         `json:"color"`
+	Type        string         `json:"type"`
+	CreatorId   string         `db:"creator_id" json:"creatorId"`
+	DoerId      string         `db:"doer_id" json:"doerId"`
+	AimId       sql.NullString `db:"aim_id" json:"aimId"`
 }
 
 type CustomCategory struct {
@@ -46,14 +49,14 @@ type UserGroup struct {
 }
 
 type Event struct {
-	Id               string `json:"id"`
-	Category         string `json:"category"`
-	Date             string `json:"date"`
-	Time             string `json:"time"`
-	Repit            string `json:"repit"`
-	Remind           string `json:"remind"`
-	CustomCategoryId string `db:"custom_category_id" json:"customCategoryId"`
-	TaskId           string `db:"task_id" json:"taskId"`
+	Id               string         `json:"id"`
+	Category         string         `json:"category"`
+	Date             string         `json:"date"`
+	Time             string         `json:"time"`
+	Repit            string         `json:"repit"`
+	Remind           string         `json:"remind"`
+	CustomCategoryId sql.NullString `db:"custom_category_id" json:"customCategoryId"`
+	TaskId           string         `db:"task_id" json:"taskId"`
 }
 
 type Session struct {

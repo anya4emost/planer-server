@@ -21,10 +21,6 @@ func (s *Server) SetupRoutes(
 	aimController *controller.AimsController,
 	eventsController *controller.EventsController) {
 
-	// s.app.Use(encryptcookie.New(encryptcookie.Config{
-	// 	Key: "secret-key-for-cookie-encription",
-	// }))
-
 	s.app.Use(func(c *fiber.Ctx) error {
 
 		fmt.Println("\n" + c.Path())

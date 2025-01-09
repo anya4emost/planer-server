@@ -38,7 +38,7 @@ create table tasks(
       type task_type not null,
       creator_id text not null references users(id),
       doer_id text not null references users(id),
-      aim_id text not null references aims(id)
+      aim_id text references aims(id)
 );
 
 create table events(

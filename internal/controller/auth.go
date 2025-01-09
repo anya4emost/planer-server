@@ -88,13 +88,15 @@ func (c *AuthController) Register(ctx *fiber.Ctx) error {
 	}
 
 	ctx.Cookie(&fiber.Cookie{
-		Name:  "access-token",
-		Value: accessToken,
+		Name:     "access-token",
+		Value:    accessToken,
+		HTTPOnly: true,
 	})
 
 	ctx.Cookie(&fiber.Cookie{
-		Name:  "refresh-token",
-		Value: refreshToken,
+		Name:     "refresh-token",
+		Value:    refreshToken,
+		HTTPOnly: true,
 	})
 
 	familyId, err := gonanoid.New()
@@ -145,18 +147,20 @@ func (c *AuthController) Login(ctx *fiber.Ctx) error {
 	}
 
 	ctx.Cookie(&fiber.Cookie{
-		Name:  "access-token",
-		Value: accessToken,
+		Name:     "access-token",
+		Value:    accessToken,
+		HTTPOnly: true,
 	})
 
 	ctx.Cookie(&fiber.Cookie{
-		Name:  "refresh-token",
-		Value: refreshToken,
+		Name:     "refresh-token",
+		Value:    refreshToken,
+		HTTPOnly: true,
 	})
 
-	familyId, err := gonanoid.New()
-	if err != nil {
-		return response.ErrorBadRequest(err)
+	familyId, err2 := gonanoid.New()
+	if err2 != nil {
+		return response.ErrorBadRequest(err2)
 	}
 
 	session := model.Session{
@@ -205,8 +209,6 @@ func (c *AuthController) Logout(ctx *fiber.Ctx) error {
 		return response.DefaultErrorHandler(ctx, err)
 	}
 
-	// ctx.ClearCookie("access-token", "refresh-token")
-
 	ClearCookies(ctx, "access-token", "refresh-token")
 
 	return response.Ok(ctx, fiber.Map{})
@@ -243,13 +245,15 @@ func (c *AuthController) Refresh(ctx *fiber.Ctx) error {
 	}
 
 	ctx.Cookie(&fiber.Cookie{
-		Name:  "access-token",
-		Value: accessToken,
+		Name:     "access-token",
+		Value:    accessToken,
+		HTTPOnly: true,
 	})
 
 	ctx.Cookie(&fiber.Cookie{
-		Name:  "refresh-token",
-		Value: newRefreshToken,
+		Name:     "refresh-token",
+		Value:    newRefreshToken,
+		HTTPOnly: true,
 	})
 
 	newSession := model.Session{
