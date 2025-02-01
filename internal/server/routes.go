@@ -46,11 +46,17 @@ func (s *Server) SetupRoutes(
 	tasksApi.Put("/:taskId/", taskController.UpdateTask)
 	tasksApi.Delete("/:taskId/", taskController.DeleteTask)
 
-	// POST "/api/tasks/${taskid}/event"
-	tasksApi.Post("/:taskid/event", eventsController.CreateEvent)
+	eventsApi := api.Group("/events")
+	eventsApi.Use(middleware.AccessTokenVerification(s.jwtSecret))
+	eventsApi.Get("/", eventsController.GetEvents)
+	eventsApi.Post("/", eventsController.CreateEvent)
+	eventsApi.Put("/:eventId/", eventsController.UpdateEvent)
+	eventsApi.Delete("/:eventId/", eventsController.DeleteEvent)
 
 	aimsApi := api.Group("/aims")
 	aimsApi.Use(middleware.AccessTokenVerification(s.jwtSecret))
 	aimsApi.Get("/", aimController.GetAims)
 	aimsApi.Post("/", aimController.CreateAim)
+	aimsApi.Put("/:aimId/", aimController.UpdateAim)
+	aimsApi.Delete("/:aimId/", aimController.DeleteAim)
 }

@@ -51,3 +51,31 @@ func (c *AimsController) CreateAim(ctx *fiber.Ctx) error {
 
 	return response.Ok(ctx, aim)
 }
+
+func (c *AimsController) UpdateAim(ctx *fiber.Ctx) error {
+	aimId := ctx.Params("aimId")
+	input := model.AimInput{}
+
+	if err := ctx.BodyParser(&input); err != nil {
+		return response.ErrorBadRequest(err)
+	}
+
+	input.Id = aimId
+
+	event, err := c.s.Update(input)
+	if err != nil {
+		return response.ErrorBadRequest(err)
+	}
+
+	return response.Ok(ctx, event)
+}
+
+func (c *AimsController) DeleteAim(ctx *fiber.Ctx) error {
+	err := c.s.Delete(ctx.Params("aimId"))
+
+	if err != nil {
+		return response.ErrorBadRequest(err)
+	}
+
+	return response.Response(ctx, 204, fiber.Map{})
+}

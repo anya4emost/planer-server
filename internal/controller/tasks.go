@@ -34,11 +34,27 @@ func (c *TasksController) GetTasks(ctx *fiber.Ctx) error {
 	outputRange := []fiber.Map{}
 
 	for _, task := range tasks {
+
+		timeStartFormated := ""
+		timeEndFormated := ""
+
+		if task.TimeStart.Valid {
+			timeStartFormated = task.TimeStart.Time.Format("15:04")
+		}
+
+		if task.TimeEnd.Valid {
+			timeEndFormated = task.TimeEnd.Time.Format("15:04")
+		}
+
 		outputRange = slices.Insert(outputRange, len(outputRange), fiber.Map{
 			"id":          task.Id,
 			"name":        task.Name,
-			"status":      task.Status,
+			"isDone":      task.IsDone,
 			"description": task.Description,
+			"date":        task.Date.String,
+			"timeStart":   timeStartFormated,
+			"timeEnd":     timeEndFormated,
+			"timeZone":    task.TimeZone.String,
 			"icon":        task.Icon,
 			"color":       task.Color,
 			"type":        task.Type,

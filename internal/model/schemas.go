@@ -19,19 +19,6 @@ type Aim struct {
 	Name   string `json:"name"`
 }
 
-type Task struct {
-	Id          string         `json:"id"`
-	Name        string         `json:"name"`
-	Status      string         `json:"status"`
-	Description string         `json:"description"`
-	Icon        string         `json:"icon"`
-	Color       string         `json:"color"`
-	Type        string         `json:"type"`
-	CreatorId   string         `db:"creator_id" json:"creatorId"`
-	DoerId      string         `db:"doer_id" json:"doerId"`
-	AimId       sql.NullString `db:"aim_id" json:"aimId"`
-}
-
 type CustomCategory struct {
 	Id   string `json:"id"`
 	Name string `json:"name"`
@@ -48,15 +35,38 @@ type UserGroup struct {
 	GroupId string `db:"group_id" json:"groupId"`
 }
 
+type Task struct {
+	Id          string         `json:"id"`
+	Name        string         `json:"name"`
+	IsDone      bool           `db:"is_done" json:"isDone"`
+	Description string         `json:"description"`
+	Icon        string         `json:"icon"`
+	Color       string         `json:"color"`
+	Type        string         `json:"type"`
+	Date        sql.NullString `json:"date"`
+	TimeStart   sql.NullTime   `db:"time_start" json:"timeStart"`
+	TimeEnd     sql.NullTime   `db:"time_end" json:"timeEnd"`
+	TimeZone    sql.NullString `db:"time_zone" json:"timeZone"`
+	CreatorId   string         `db:"creator_id" json:"creatorId"`
+	DoerId      string         `db:"doer_id" json:"doerId"`
+	AimId       sql.NullString `db:"aim_id" json:"aimId"`
+}
+
 type Event struct {
 	Id               string         `json:"id"`
-	Category         string         `json:"category"`
+	Name             string         `json:"name"`
+	Description      string         `json:"description"`
+	Icon             string         `json:"icon"`
+	Color            string         `json:"color"`
+	Category         sql.NullString `json:"category"`
 	Date             string         `json:"date"`
-	Time             string         `json:"time"`
+	Duration         int            `json:"duration"`
+	TimeZone         sql.NullString `db:"time_zone" json:"timeZone"`
 	Repit            string         `json:"repit"`
 	Remind           string         `json:"remind"`
+	TaskTracker      bool           `db:"task_tracker" json:"taskTracker"`
 	CustomCategoryId sql.NullString `db:"custom_category_id" json:"customCategoryId"`
-	TaskId           string         `db:"task_id" json:"taskId"`
+	CreatorId        string         `db:"creator_id" json:"creatorId"`
 }
 
 type Session struct {

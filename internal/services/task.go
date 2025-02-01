@@ -2,6 +2,7 @@ package services
 
 import (
 	"database/sql"
+	"time"
 
 	"github.com/anya4emost/planer-server/internal/model"
 	"github.com/jmoiron/sqlx"
@@ -32,10 +33,17 @@ func (s *TaskService) GetById(id string) (*model.Task, error) {
 }
 
 func (s *TaskService) Create(inputTask model.TaskInput) (*model.Task, error) {
+	timeStart, tserr := time.Parse("15:04", inputTask.TimeStart)
+	timeEnd, teerr := time.Parse("15:04", inputTask.TimeEnd)
+
 	newTask := model.Task{
-		Status:      inputTask.Status,
+		IsDone:      inputTask.IsDone,
 		Name:        inputTask.Name,
 		Description: inputTask.Description,
+		Date:        sql.NullString{String: inputTask.Date, Valid: len(inputTask.Date) > 0},
+		TimeStart:   sql.NullTime{Time: timeStart, Valid: tserr == nil},
+		TimeEnd:     sql.NullTime{Time: timeEnd, Valid: teerr == nil},
+		TimeZone:    sql.NullString{String: inputTask.TimeZone, Valid: len(inputTask.TimeZone) > 0},
 		Icon:        inputTask.Icon,
 		Color:       inputTask.Color,
 		Type:        inputTask.Type,
@@ -46,8 +54,8 @@ func (s *TaskService) Create(inputTask model.TaskInput) (*model.Task, error) {
 
 	rows, err := s.db.NamedQuery(
 		`insert into tasks
-		(status, name, description, icon, color, type, creator_id, doer_id, aim_id)
-		values (:status, :name, :description, :icon, :color, :type, :creator_id, :doer_id, :aim_id)`,
+		(is_done, name, description, date, time_start, time_end, time_zone, icon, color, type, creator_id, doer_id, aim_id)
+		values (:is_done, :name, :description, :date, :time_start, :time_end, :time_zone, :icon, :color, :type, :creator_id, :doer_id, :aim_id)`,
 		newTask,
 	)
 
@@ -62,12 +70,18 @@ func (s *TaskService) Create(inputTask model.TaskInput) (*model.Task, error) {
 }
 
 func (s *TaskService) Update(inputTask model.TaskInput) (*model.Task, error) {
+	timeStart, tserr := time.Parse("15:04", inputTask.TimeStart)
+	timeEnd, teerr := time.Parse("15:04", inputTask.TimeEnd)
 
 	taskToUpdate := model.Task{
 		Id:          inputTask.Id,
-		Status:      inputTask.Status,
+		IsDone:      inputTask.IsDone,
 		Name:        inputTask.Name,
 		Description: inputTask.Description,
+		Date:        sql.NullString{String: inputTask.Date, Valid: len(inputTask.Date) > 0},
+		TimeStart:   sql.NullTime{Time: timeStart, Valid: tserr == nil},
+		TimeEnd:     sql.NullTime{Time: timeEnd, Valid: teerr == nil},
+		TimeZone:    sql.NullString{String: inputTask.TimeZone, Valid: len(inputTask.TimeZone) > 0},
 		Icon:        inputTask.Icon,
 		Color:       inputTask.Color,
 		Type:        inputTask.Type,
@@ -77,7 +91,7 @@ func (s *TaskService) Update(inputTask model.TaskInput) (*model.Task, error) {
 
 	rows, err := s.db.NamedQuery(
 		`update tasks set 
-		status=:status, name=:name, description=:description, icon=:icon, color=:color, type=:type, doer_id=:doer_id, aim_id=:aim_id
+		is_done=:is_done, name=:name, description=:description, icon=:icon, date=:date, time_start=:time_start, time_end=:time_end, time_zone=:time_zone, color=:color, type=:type, doer_id=:doer_id, aim_id=:aim_id
 		where id=:id`,
 		taskToUpdate,
 	)

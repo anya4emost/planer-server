@@ -4,7 +4,6 @@ CREATE TYPE event_repit_type AS ENUM ('EveryHour', 'EveryDay', 'EveryWeek', 'Eve
 CREATE TYPE event_remind_type AS ENUM ('FiveMinBefore', 'TenMinBefore', 'FifteenMinBefore', 'ThirtyMinBefore', 'HourBefore', 'DayBefore', 'WeekBefore', 'MonthBefore');
 CREATE TYPE event_category AS ENUM ('Task', 'MemorableDate');
 CREATE TYPE task_type AS ENUM ('Urgent', 'Important');
-CREATE TYPE task_status AS ENUM ('Analysis', 'InProgress', 'Done', 'Canceled', 'OnHold');
 
 create table groups(
      id text not null primary key default nanoid(),
@@ -31,10 +30,14 @@ create table custom_category(
 create table tasks(
       id text not null primary key default nanoid(),
       name text not null check (name<>''),
-      status task_status not null,
+      is_done boolean not null,
       description text,
       icon text,
       color text,
+      date timestamp,
+      time_zone text,
+      time_start time,
+      time_end time,
       type task_type not null,
       creator_id text not null references users(id),
       doer_id text not null references users(id),
@@ -43,13 +46,19 @@ create table tasks(
 
 create table events(
       id text not null primary key default nanoid(),
+      name text not null check (name<>''),
+      description text,
+      icon text,
+      color text,
       category event_category,
-      date timestamptz,
-      time time not null,
+      date timestamp,
+      duration smallint,
+      time_zone text,
       repit event_repit_type,
       remind event_remind_type,
+      task_tracker boolean,
       custom_category_id text references custom_category(id),
-      task_id text unique references tasks(id) on delete cascade
+      creator_id text not null references users(id)
 );
 
 create table sessions(

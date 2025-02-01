@@ -50,3 +50,30 @@ func (s *AimService) Create(inputAim model.AimInput) (*model.Aim, error) {
 
 	return &aim, err
 }
+
+func (s *AimService) Update(inputAim model.AimInput) (*model.Aim, error) {
+	aimToUpdate := model.Aim{
+		Id:   inputAim.Id,
+		Name: inputAim.Name,
+	}
+
+	rows, err := s.db.NamedQuery(
+		`update aims set name=:name where id=:id`,
+		aimToUpdate,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+	aim := model.Aim{}
+	rows.Next()
+	rows.StructScan(&aim)
+
+	return &aim, err
+}
+
+func (s *AimService) Delete(aimId string) error {
+	_, err := s.db.Exec("delete from aims where id=$1", aimId)
+
+	return err
+}

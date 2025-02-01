@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/anya4emost/planer-server/internal/config"
 	"github.com/anya4emost/planer-server/internal/database"
@@ -70,9 +71,12 @@ func main() {
 	fmt.Printf("\n%#v\n", firstAim)
 
 	newTask := model.Task{
-		Status:      "Analysis",
+		IsDone:      false,
 		Name:        "task name",
 		Description: "first task description",
+		Date:        sql.NullString{String: "02-20-2025", Valid: true},
+		TimeStart:   sql.NullTime{Time: time.Now(), Valid: true},
+		TimeEnd:     sql.NullTime{Time: time.Now().Add(time.Hour), Valid: true},
 		Icon:        "",
 		Color:       "",
 		Type:        "Important",
@@ -83,19 +87,49 @@ func main() {
 
 	_, errt := db.NamedQuery(
 		`insert into tasks
-		(status, name, description, icon, color, type, creator_id, doer_id, aim_id)
-		values (:status, :name, :description, :icon, :color, :type, :creator_id, :doer_id, :aim_id)`,
+		(is_done, name, description, date, time_start, time_end, icon, color, type, creator_id, doer_id, aim_id)
+		values (:is_done, :name, :description, :date, :time_start, :time_end, :icon, :color, :type, :creator_id, :doer_id, :aim_id)`,
 		newTask,
 	)
 
 	if errt != nil {
-		log.Fatalf("Error inserting task: %v\n", errA)
+		log.Fatalf("Error inserting task: %v\n", errt)
 	}
 
 	firstTask := model.Task{}
 	db.Get(&firstTask, "select * from tasks where creator_id=$1", adminUser.Id)
 
 	fmt.Printf("\n%#v\n", firstTask)
+
+	newEvent := model.Event{
+		Name:        "event name",
+		Description: "first event description",
+		Date:        "02-20-2025",
+		Duration:    120,
+		Icon:        "",
+		Color:       "",
+		Category:    sql.NullString{String: "", Valid: true},
+		Repit:       "EveryDay",
+		Remind:      "TenMinBefore",
+		TaskTracker: false,
+		CreatorId:   adminUser.Id,
+	}
+
+	_, erre := db.NamedQuery(
+		`insert into events
+		(name, description, date, duration, icon, color, creator_id, repit, remind, task_tracker)
+		values (:name, :description, :date, :duration, :icon, :color, :creator_id, :repit, :remind, :task_tracker)`,
+		newEvent,
+	)
+
+	if erre != nil {
+		log.Fatalf("Error inserting event: %v\n", erre)
+	}
+
+	firstEvent := model.Event{}
+	db.Get(&firstEvent, "select * from events where creator_id=$1", adminUser.Id)
+
+	fmt.Printf("\n%#v\n", firstEvent)
 
 	log.Printf("\nSuccessfully inserted data in tables")
 }
